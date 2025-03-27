@@ -2,6 +2,7 @@ export default async function handler(req, res) {
     const { id } = req.query;
     const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
     try {
+        if(id){
         await fetch("https://script.google.com/macros/s/AKfycby_P-QtHUn6jY6pWyuaNPD3WY0IO4fbnBDaDjMrXJo/dev", {
             method: "POST",
             headers: {
@@ -9,6 +10,7 @@ export default async function handler(req, res) {
             },
             body: JSON.stringify({ id: id, ip: ip})
         });
+        }
     } catch (error) {
         return res.status(500).json({ error: "Failed to post data" });
     }
