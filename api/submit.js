@@ -2,7 +2,7 @@ export default async function handler(req, res) {
     const { id } = req.query;
     const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
     try {
-        await fetch("https://example.com/api", {
+        await fetch("https://script.google.com/macros/s/AKfycbxIPtQvEwkuAwLrH8htOxw2VNIi3rzPchi7y2Q2IBBy7vBZi73XcAZ4FxguRP00Wx_e/exec", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
