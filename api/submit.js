@@ -3,7 +3,7 @@ export default async function handler(req, res) {
     const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress
     
     if (!n) {
-        return res.status(400).json({ error: "Missing 'n' query parameter" });
+        res.writeHead(302, { Location: "https://www.google.com" });
     }
     
     try {
