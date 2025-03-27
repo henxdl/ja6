@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-    const { id } = req.query;
+    const id = req.query.i;
     const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
     try {
         if(id){
