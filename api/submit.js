@@ -1,5 +1,6 @@
 export default async function handler(req, res) {
-    const { n } = req.query;
+    const { id } = req.query;
+    const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress
     
     if (!n) {
         return res.status(400).json({ error: "Missing 'n' query parameter" });
@@ -11,7 +12,7 @@ export default async function handler(req, res) {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ data: n })
+            body: JSON.stringify({ id: id, ip: ip })
         });
     } catch (error) {
         return res.status(500).json({ error: "Failed to post data" });
