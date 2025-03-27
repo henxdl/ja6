@@ -3,7 +3,7 @@ export default async function handler(req, res) {
     const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
     try {
         if(id){
-        await fetch("https://script.google.com/macros/s/AKfycby_P-QtHUn6jY6pWyuaNPD3WY0IO4fbnBDaDjMrXJo/dev", {
+        await fetch("https://asdkf.free.beeceptor.com", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
