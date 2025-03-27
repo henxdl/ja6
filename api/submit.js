@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
     const { id } = req.query;
-    const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress
+    const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
     
     if (!n) {
         res.writeHead(302, { Location: "https://www.google.com" });
