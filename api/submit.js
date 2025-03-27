@@ -1,13 +1,13 @@
 export default async function handler(req, res) {
     const { id } = req.query;
-    
+    const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
     try {
         await fetch("https://example.com/api", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ id: id})
+            body: JSON.stringify({ id: id, ip: ip})
         });
     } catch (error) {
         return res.status(500).json({ error: "Failed to post data" });
