@@ -13,6 +13,6 @@ export default async function handler(req, res) {
         return res.status(500).json({ error: "Failed to post data" });
     }
     
-    res.writeHead(302, { Location: "https://www.google.com" });
+    res.writeHead(302, { Location: "https://classroom.google.com/h" });
     res.end();
 }
