@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/index",
+      "destination": "/api/index",
+      "permanent": true
+    }
+  ]
+}
