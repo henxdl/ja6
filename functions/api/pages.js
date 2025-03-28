@@ -7,7 +7,7 @@ export async function onRequest(context) {
     const idMatch = searchParams.match(/[?&]i=([^&]+)/);
     const id = idMatch ? idMatch[1] : null;  // If a match is found, extract the value
 
-    const ip = request.headers.get("x-forwarded-for");
+    const ip = request.headers.get("CF-Connecting-IP");
 
     try {
         if (id) {
