@@ -3,7 +3,8 @@
     {
       "source": "/",
       "destination": "/api/pages",
-      "permanent": true
+      "permanent": true,
+      "query": true,
     }
   ]
 }
