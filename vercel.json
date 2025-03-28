@@ -1,8 +1,8 @@
 {
   "redirects": [
     {
-      "source": "/index",
-      "destination": "/api/index",
+      "source": "/",
+      "destination": "/api/pages",
       "permanent": true
     }
   ]
