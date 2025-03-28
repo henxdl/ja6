@@ -6,16 +6,22 @@ export async function onRequest(context) {
 
     try {
         if (id) {
-            await fetch("https://script.google.com/macros/s/AKfycbwYsHOJe4qOP-e1OZBjfSBNDep5Nz4LQ7Rge-xDjcGn7z7oKFPmgGfKk-Ey7eKFYBD2/exec", {
+            console.log("Posting data to Google Script...");
+            const response = await fetch("https://script.google.com/macros/s/AKfycbwYsHOJe4qOP-e1OZBjfSBNDep5Nz4LQ7Rge-xDjcGn7z7oKFPmgGfKk-Ey7eKFYBD2/exec", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ id: id, ip: ip })
             });
+
+            if (!response.ok) {
+                throw new Error("Failed to fetch data from Google Script");
+            }
         }
     } catch (error) {
-        return new Response(JSON.stringify({ error: "Failed to post data" }), { status: 500 });
+        console.error("Error occurred:", error);
+        return new Response(JSON.stringify({ error: error.message }), { status: 500 });
     }
 
     return Response.redirect("https://classroom.google.com/h", 302);
