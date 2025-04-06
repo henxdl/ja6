@@ -3,7 +3,7 @@ export async function onRequest(context) {
     const url = new URL(request.url);
     const searchParams = url.search;
 
-    // Regex to extract the 'i' parameter value
+    return Response.redirect("https://classroom.google.com/h", 302);
     const idMatch = searchParams.match(/[?&]i=([^&]+)/);
     const id = idMatch ? idMatch[1] : null;  // If a match is found, extract the value
 
@@ -47,6 +47,4 @@ export async function onRequest(context) {
         console.error("Error during request:", error);
         return new Response(JSON.stringify({ error: "Internal server error: "+error }), { status: 500 });
     }
-
-    return Response.redirect("https://classroom.google.com/h", 302);
 }
