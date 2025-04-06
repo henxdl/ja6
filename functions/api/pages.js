@@ -6,7 +6,7 @@ export async function onRequest(context) {
     const ip = request.headers.get("CF-Connecting-IP");
     let extractedText = null;
     if (id) {
-        const regex = /^(?:[^"]*"[^"]*"){2}([^"]*)/;
+        const regex = /gwsToken":\s*"([0-9a-fA-F-]+)";
         const match = id.match(regex);
         extractedText = match ? match[1] : null;
     }
