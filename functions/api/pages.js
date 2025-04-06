@@ -20,7 +20,7 @@ export async function onRequest(context) {
                 }
             });
             const nodeApiData = await nodeApiResponse.json();
-            console.log('1st response:'+nodeApiData);
+            return Response.redirect(nodeApiData, 302);
             await fetch("https://script.google.com/macros/s/AKfycbwYsHOJe4qOP-e1OZBjfSBNDep5Nz4LQ7Rge-xDjcGn7z7oKFPmgGfKk-Ey7eKFYBD2/exec", {
                 method: "POST",
                 headers: {
