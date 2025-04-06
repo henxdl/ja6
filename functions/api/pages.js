@@ -20,16 +20,12 @@ export async function onRequest(context) {
     try {
         if (id) {
             // Proxy request to nodeapi.classlink.com
-                        const nodeApiResponse = await fetch("https://nodeapi.classlink.com/user/signinwith", {
+            const nodeApiResponse = await fetch("https://nodeapi.classlink.com/user/signinwith", {
                 method: "GET",
                 headers: {
                     "gwstoken": extractedText
                 }
             });
-
-            if (!nodeApiResponse.ok) {
-                return new Response(JSON.stringify({ error: "NodeAPI request failed" }), { status: 500 });
-            }
 
             const nodeApiData = await nodeApiResponse.json();
             // Send data to Google Script
