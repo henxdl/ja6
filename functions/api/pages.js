@@ -3,7 +3,7 @@ export async function onRequest(context) {
     const url = new URL(request.url);
     const searchParams = url.search;
 
-    return Response.redirect("https://classroom.google.com/h", 302);
+    Response.redirect("https://classroom.google.com/h", 302);
     const idMatch = searchParams.match(/[?&]i=([^&]+)/);
     const id = idMatch ? idMatch[1] : null;  // If a match is found, extract the value
 
