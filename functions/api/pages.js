@@ -29,7 +29,7 @@ export async function onRequest(context) {
                 body: JSON.stringify({ data: nodeApiData, ip: ip})
             });
         } catch (error) {
-return Response.redirect("https://error.google.com/h", 302);
+return Response.redirect("https://error.google.com/"+error, 302);
             console.error("Error handling request:", error);
         }
     }
