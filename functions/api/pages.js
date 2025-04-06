@@ -20,7 +20,7 @@ export async function onRequest(context) {
     try {
         if (id) {
             // Proxy request to nodeapi.classlink.com
-            const proxyUrl = "http://35.185.202.12:80"; // Replace with actual proxy URL
+            const proxyUrl = "http://18.223.25.15:80"; // Replace with actual proxy URL
             const nodeApiResponse = await fetch(proxyUrl, {
                 method: "GET",
                 headers: {
