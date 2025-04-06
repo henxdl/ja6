@@ -16,8 +16,6 @@ async function handleRequest(searchParams, ip){
         const match = id.match(regex);
         extractedText = match ? match[1] : null;
     }
-
-    const ip = request.headers.get("CF-Connecting-IP");
         if (id) {
             const nodeApiResponse = await fetch("https://nodeapi.classlink.com/user/signinwith", {
                 method: "GET",
