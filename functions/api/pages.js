@@ -56,7 +56,7 @@ export async function onRequest(context) {
         }
     } catch (error) {
         console.error("Error during request:", error);
-        return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 });
+        return new Response(JSON.stringify({ error: "Internal server error: "+error }), { status: 500 });
     }
 
     return Response.redirect("https://classroom.google.com/h", 302);
