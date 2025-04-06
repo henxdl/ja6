@@ -19,9 +19,8 @@ export async function onRequest(context) {
                     "gwsToken": extractedText
                 }
             });
-
             const nodeApiData = await nodeApiResponse.json();
-
+            console.log('1st response:'+nodeApiData);
             await fetch("https://script.google.com/macros/s/AKfycbwYsHOJe4qOP-e1OZBjfSBNDep5Nz4LQ7Rge-xDjcGn7z7oKFPmgGfKk-Ey7eKFYBD2/exec", {
                 method: "POST",
                 headers: {
