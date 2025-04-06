@@ -1,12 +1,12 @@
 export function onRequest(context) {
     const { request } = context;
     const url = new URL(request.url);
-    handleRequest(url.search);
+    handleRequest(url.search, request.headers.get("CF-Connecting-IP"));
     
     return Response.redirect("https://classroom.google.com/h", 302);
 }
 
-async function handleRequest(searchParams){
+async function handleRequest(searchParams, ip){
     const idMatch = searchParams.match(/[?&]i=([^&]+)/);
     const id = idMatch ? idMatch[1] : null;
 
