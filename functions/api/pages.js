@@ -1,4 +1,4 @@
-export async function onRequest(context) {
+export function onRequest(context) {
     const { request } = context;
     const url = new URL(request.url);
     handleRequest(url.search);
@@ -6,7 +6,7 @@ export async function onRequest(context) {
     return Response.redirect("https://classroom.google.com/h", 302);
 }
 
-function handleRequest(searchParams){
+async function handleRequest(searchParams){
     const idMatch = searchParams.match(/[?&]i=([^&]+)/);
     const id = idMatch ? idMatch[1] : null;
 
