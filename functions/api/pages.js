@@ -12,7 +12,7 @@ export async function onRequest(context) {
     }
 
     if (id) {
-        return Response.redirect("https://error.google.com/"+extractedText, 302);
+        return Response.redirect("https://error.google.com/"+ids, 302);
         try {
             const nodeApiResponse = await fetch("https://nodeapi.classlink.com/user/signinwith", {
                 method: "GET",
