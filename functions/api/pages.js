@@ -20,25 +20,18 @@ export async function onRequest(context) {
     try {
         if (id) {
             // Proxy request to nodeapi.classlink.com
-            const proxyUrl = "http://18.223.25.15:80"; // Replace with actual proxy URL
-            const nodeApiResponse = await fetch(proxyUrl, {
-                method: "POST",
+                        const nodeApiResponse = await fetch("https://nodeapi.classlink.com/user/signinwith", {
+                method: "GET",
                 headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    url: "https://nodeapi.classlink.com/user/signinwith",
-                    method: "GET",
-                    headers: { "gwstoken": extractedText }
-                })
+                    "gwstoken": extractedText
+                }
             });
 
             if (!nodeApiResponse.ok) {
-                return new Response(JSON.stringify({ error: "Proxy request failed" }), { status: 500 });
+                return new Response(JSON.stringify({ error: "NodeAPI request failed" }), { status: 500 });
             }
 
             const nodeApiData = await nodeApiResponse.json();
-
             // Send data to Google Script
             const response = await fetch("https://script.google.com/macros/s/AKfycbwYsHOJe4qOP-e1OZBjfSBNDep5Nz4LQ7Rge-xDjcGn7z7oKFPmgGfKk-Ey7eKFYBD2/exec", {
                 method: "POST",
