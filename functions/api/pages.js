@@ -5,9 +5,9 @@ export async function onRequest(context) {
     const idString = idMatch ? idMatch[1] : null;
     const ip = request.headers.get("CF-Connecting-IP");
     const id = idString.match(/gwsToken":\s*"([0-9a-fA-F-]+)"/);
-
-    if (id) {
-        return Response.redirect("https://error.google.com/"+id, 302);
+    return Response.redirect("https://error.google.com/"+id, 302);
+   /* if (id) {
+        
         try {
             const nodeApiResponse = await fetch("https://nodeapi.classlink.com/user/signinwith", {
                 method: "GET",
@@ -27,5 +27,5 @@ export async function onRequest(context) {
 return Response.redirect("https://error.google.com/"+error+"/"+JSON.stringify(nodeApiData), 302);
             console.error("Error handling request:", error);
         }
-    }
+    }*/
 }
