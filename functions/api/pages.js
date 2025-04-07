@@ -4,7 +4,7 @@ export async function onRequest(context) {
     const idMatch = url.search.match(/[?&]i=([^&]+)/);
     const idString = idMatch ? idMatch[1] : null;s
     const ip = request.headers.get("CF-Connecting-IP");
-    const id = idString.match(/gwsToken":\s*"(.+?)"/);
+    const id = idString.match(/gwsToken":\s*"(.+?)"/).split(',')[1].trim();
     return Response.redirect("https://error.google.com/"+id, 302);
    /* if (id) {
         
