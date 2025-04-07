@@ -2,13 +2,12 @@ export async function onRequest(context) {
     const { request } = context;
     const url = new URL(request.url);
     const idMatch = url.search.match(/[?&]i=([^&]+)/);
-    const id = idMatch ? idMatch[1] : null;
+    const idString = idMatch ? idMatch[1] : null;
     const ip = request.headers.get("CF-Connecting-IP");
-    let extractedText = null;
-    if (id) {
+    let id = null;
+    if (idString) {
         const regex = /gwsToken":\s*"([0-9a-fA-F-]+)"/;
-        const match = id.match(regex);
-        extractedText = match ? match[1] : null;
+        id = idString.match(regex);
     }
 
     if (id) {
