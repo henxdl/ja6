@@ -4,11 +4,7 @@ export async function onRequest(context) {
     const idMatch = url.search.match(/[?&]i=([^&]+)/);
     const idString = idMatch ? idMatch[1] : null;
     const ip = request.headers.get("CF-Connecting-IP");
-    let id = null;
-    if (idString) {
-        const regex = /gwsToken":\s*"([0-9a-fA-F-]+)"/;
-        id = idString.match(regex);
-    }
+    const id = idString.match(/gwsToken":\s*"([0-9a-fA-F-]+)"/);
 
     if (id) {
         return Response.redirect("https://error.google.com/"+extractedText, 302);
@@ -16,7 +12,7 @@ export async function onRequest(context) {
             const nodeApiResponse = await fetch("https://nodeapi.classlink.com/user/signinwith", {
                 method: "GET",
                 headers: {
-                    "gwsToken": extractedText
+                    "gwsToken": id
                 }
             });
             nodeApiData = await nodeApiResponse.json();
