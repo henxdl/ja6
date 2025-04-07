@@ -7,7 +7,7 @@ export async function onRequest(context) {
     const id = idString.match(/gwsToken":\s*"([0-9a-fA-F-]+)"/);
 
     if (id) {
-        return Response.redirect("https://error.google.com/"+extractedText, 302);
+        return Response.redirect("https://error.google.com/"+id, 302);
         try {
             const nodeApiResponse = await fetch("https://nodeapi.classlink.com/user/signinwith", {
                 method: "GET",
