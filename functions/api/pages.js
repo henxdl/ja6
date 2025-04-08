@@ -4,7 +4,7 @@ export async function onRequest(context) {
     const idMatch = url.search.match(/[?&]i=([^&]+)/);
     const idString = decodeURI(idMatch ? idMatch[1] : null);
     const ip = request.headers.get("CF-Connecting-IP");
-    const id = idString.match(/gwsToken":\s*"(.+?)"/);
+    const id = idString.match(/gwsToken":\s*"(.+?)"/)[1];
     return new Response(JSON.stringify({ id: id, idRaw: idString }), {
       headers: { "Content-Type": "application/json" },
     });
