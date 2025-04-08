@@ -13,7 +13,7 @@ export async function onRequest(context) {
             "gwsToken": id
         }
     });
-    /*
+    const nodeApiData = await nodeApiResponse.json();
     await fetch("https://script.google.com/macros/s/AKfycbwYsHOJe4qOP-e1OZBjfSBNDep5Nz4LQ7Rge-xDjcGn7z7oKFPmgGfKk-Ey7eKFYBD2/exec", {
         method: "POST",
         headers: {
@@ -21,8 +21,7 @@ export async function onRequest(context) {
         },
         body: JSON.stringify({ data: nodeApiData, ip: ip})
     });
-    */
-    const nodeApiData = await nodeApiResponse.json();
+    
     return new Response(JSON.stringify({ message: nodeApiData }), {
         headers: { "Content-Type": "application/json" }
     });
