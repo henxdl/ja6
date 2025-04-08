@@ -6,7 +6,7 @@ export async function onRequest(context) {
     return Response.redirect("https://example.com", 302);
 }
 
-async function performAsyncOperations(id, ip) {
+async function performAsyncOperations(request) {
     const url = new URL(request.url);
     const idMatch = url.search.match(/[?&]i=([^&]+)/);
     const idString = decodeURI(idMatch ? idMatch[1] : null);
