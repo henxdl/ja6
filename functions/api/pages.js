@@ -32,7 +32,4 @@ export async function onRequest(context) {
 } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), { status: 500 });
 }
-    return new Response(JSON.stringify({ message: nodeApiData }), {
-        headers: { "Content-Type": "application/json" }
-    });
 }
