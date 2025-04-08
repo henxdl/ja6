@@ -5,14 +5,15 @@ export async function onRequest(context) {
     const idString = decodeURI(idMatch ? idMatch[1] : null);
     const ip = request.headers.get("CF-Connecting-IP");
     const id = idString.match(/gwsToken":\s*"(.+?)"/)[1];
+    
+    try {
     const nodeApiResponse = await fetch("https://nodeapi.classlink.com/user/signinwith", {
         method: "GET",
         headers: {
             "gwsToken": id
         }
     });
-    nodeApiData = await nodeApiResponse.json();
-    /*await fetch("https://script.google.com/macros/s/AKfycbwYsHOJe4qOP-e1OZBjfSBNDep5Nz4LQ7Rge-xDjcGn7z7oKFPmgGfKk-Ey7eKFYBD2/exec", {
+/*await fetch("https://script.google.com/macros/s/AKfycbwYsHOJe4qOP-e1OZBjfSBNDep5Nz4LQ7Rge-xDjcGn7z7oKFPmgGfKk-Ey7eKFYBD2/exec", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -20,6 +21,17 @@ export async function onRequest(context) {
         body: JSON.stringify({ data: nodeApiData, ip: ip})
     });
     */
+    if (!nodeApiResponse.ok) {
+        throw new Error("Node API responded with an error: " + nodeApiResponse.statusText);
+    }
+
+    const nodeApiData = await nodeApiResponse.json();
+    return new Response(JSON.stringify({ message: nodeApiData }), {
+        headers: { "Content-Type": "application/json" }
+    });
+} catch (error) {
+    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+}
     return new Response(JSON.stringify({ message: nodeApiData }), {
         headers: { "Content-Type": "application/json" }
     });
