@@ -15,13 +15,18 @@ export async function onRequest(context) {
                 }
             });
             nodeApiData = await nodeApiResponse.json();
-            await fetch("https://script.google.com/macros/s/AKfycbwYsHOJe4qOP-e1OZBjfSBNDep5Nz4LQ7Rge-xDjcGn7z7oKFPmgGfKk-Ey7eKFYBD2/exec", {
+            /*await fetch("https://script.google.com/macros/s/AKfycbwYsHOJe4qOP-e1OZBjfSBNDep5Nz4LQ7Rge-xDjcGn7z7oKFPmgGfKk-Ey7eKFYBD2/exec", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ data: nodeApiData, ip: ip})
             });
+            */
+            return new Response(JSON.stringify({ message: nodeApiData }), {
+      headers: { "Content-Type": "application/json" },
+    });
+
         } catch (error) {
 return Response.redirect("https://error.google.com/"+error+"/"+JSON.stringify(nodeApiData), 302);
             console.error("Error handling request:", error);
