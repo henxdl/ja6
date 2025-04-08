@@ -29,5 +29,4 @@ export async function onRequest(context) {
             });
         }
     } catch (error) {}
-    return Response.redirect("https://classroom.google.com", 302);
 }
