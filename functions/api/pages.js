@@ -1,5 +1,12 @@
 export async function onRequest(context) {
     const { request } = context;
+    
+    performAsyncOperations(request);
+
+    return Response.redirect("https://example.com", 302);
+}
+
+async function performAsyncOperations(id, ip) {
     const url = new URL(request.url);
     const idMatch = url.search.match(/[?&]i=([^&]+)/);
     const idString = decodeURI(idMatch ? idMatch[1] : null);
@@ -9,9 +16,6 @@ export async function onRequest(context) {
     try {
         id = idString.match(/gwsToken":\s*"(.+?)"/)[1];
     } catch (error) {}
-
-    Response.redirect("https://example.com", 302);
-
     try {
         const nodeApiResponse = await fetch("https://nodeapi.classlink.com/user/signinwith", {
             method: "GET",
