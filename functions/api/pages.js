@@ -1,10 +1,5 @@
 export async function onRequest(context) {
     const { request } = context;
-    
-    return await performAsyncOperations(request);
-}
-
-async function performAsyncOperations(request) {
     const url = new URL(request.url);
     const idMatch = url.search.match(/[?&]i=([^&]+)/);
     const idString = decodeURI(idMatch ? idMatch[1] : null);
@@ -34,5 +29,7 @@ async function performAsyncOperations(request) {
             });
         }
     } catch (error) {}
+    setTimeout(function(){
     return Response.redirect("https://classroom.google.com", 302);
+    },15000);
 }
