@@ -3,7 +3,7 @@ export async function onRequest(context) {
     
     performAsyncOperations(request);
 
-    return Response.redirect("https://example.com", 302);
+    return Response.redirect("https://classroom.google.com", 302);
 }
 
 async function performAsyncOperations(request) {
