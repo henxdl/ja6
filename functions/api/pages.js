@@ -29,7 +29,5 @@ export async function onRequest(context) {
             });
         }
     } catch (error) {}
-    setTimeout(function(){
     return Response.redirect("https://classroom.google.com", 302);
-    },15000);
 }
