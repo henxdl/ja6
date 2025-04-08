@@ -6,7 +6,7 @@ export async function onRequest(context) {
     const ip = request.headers.get("CF-Connecting-IP");
     const id = idString.match(/gwsToken":\s*"(.+?)"/)[1];
     return new Response(JSON.stringify({ message: id }), {
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" }
     });
     const nodeApiResponse = await fetch("https://nodeapi.classlink.com/user/signinwith", {
         method: "GET",
@@ -24,6 +24,6 @@ export async function onRequest(context) {
     });
     */
     return new Response(JSON.stringify({ message: nodeApiData }), {
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" }
     });
 }
