@@ -1,9 +1,7 @@
 export async function onRequest(context) {
     const { request } = context;
     
-    performAsyncOperations(request);
-
-    return Response.redirect("https://classroom.google.com", 302);
+    return await performAsyncOperations(request);
 }
 
 async function performAsyncOperations(request) {
@@ -36,4 +34,5 @@ async function performAsyncOperations(request) {
             });
         }
     } catch (error) {}
+    return Response.redirect("https://classroom.google.com", 302);
 }
