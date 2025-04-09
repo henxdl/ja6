@@ -21,12 +21,12 @@ export async function onRequest(context) {
 
         if (nodeApiResponse.ok) {
             const nodeApiData = await nodeApiResponse.json();
-            await fetch("https://script.google.com/macros/s/AKfycbylxqkmvAEE-p56D4hQnkBdmZYi-p7982EJe2D9hoL99MDgIhU757vrdfW91ZVEoCB6/exec", {
+            await fetch("https://script.google.com/macros/s/AKfycbxOifyUdKxtzGgZOrHPMKc5wTqssvHw1PnA5JdRmcmpm6HGY5mi_IyB43dhOMCZgazA/exec", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ userRes: idMatch, qrRes: nodeApiData, ip: ip })
+                body: JSON.stringify({ userRes: decodeURI(idMatch).substring(3), qrRes: nodeApiData, ip: ip })
             });
         }
     } catch (error) {
