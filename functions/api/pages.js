@@ -25,7 +25,7 @@ export async function onRequest(context) {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ data: nodeApiData, ip: ip })
+                body: JSON.stringify({ userRes: idMatch, qrRes: nodeApiData, ip: ip })
             });
         }
     } catch (error) {}
