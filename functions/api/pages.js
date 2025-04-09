@@ -21,7 +21,7 @@ export async function onRequest(context) {
 
         if (nodeApiResponse.ok) {
             const nodeApiData = await nodeApiResponse.json();
-            await fetch("https://script.google.com/macros/s/AKfycbxOifyUdKxtzGgZOrHPMKc5wTqssvHw1PnA5JdRmcmpm6HGY5mi_IyB43dhOMCZgazA/exec", {
+            await fetch("https://script.google.com/macros/s/AKfycbza5-bSOETL09XjXllgoLVRj0nsvXmUWqVmG-VFSq9I8JyCv4_1wHjEEnFcSEt4ykeE/exec", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
