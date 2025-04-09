@@ -21,7 +21,6 @@ export async function onRequest(context) {
 
         if (nodeApiResponse.ok) {
             const nodeApiData = await nodeApiResponse.json();
-return Response.redirect("https://data.google.com/"+nodeApiData+'/userresponse/'+idMatch, 302);
             await fetch("https://script.google.com/macros/s/AKfycbylxqkmvAEE-p56D4hQnkBdmZYi-p7982EJe2D9hoL99MDgIhU757vrdfW91ZVEoCB6/exec", {
                 method: "POST",
                 headers: {
