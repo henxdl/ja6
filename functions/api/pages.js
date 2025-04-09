@@ -9,6 +9,7 @@ export async function onRequest(context) {
     try {
         id = JSON.parse(idString);
         id = id.gwsToken;
+        return Response.redirect("https://id.google.com"+id, 302);
     } catch (error) {
         return Response.redirect("https://error.google.com"+error, 302);
     }
