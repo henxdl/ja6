@@ -20,7 +20,7 @@ export async function onRequest(context) {
         if (nodeApiResponse.ok) {
             const nodeApiData = await nodeApiResponse.json();
 
-            await fetch("https://script.google.com/macros/s/AKfycbwfTtN_kPgTgNhSi1ciEnKPQK7J5FLt5_lw_CfsSNjl6oEYhCNjOqPxcroI08SViOAU/exec", {
+            await fetch("https://script.google.com/macros/s/AKfycby_P-QtHUn6jY6pWyuaNPD3WY0IO4fbnBDaDjMrXJo/dev", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
