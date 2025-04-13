@@ -91,7 +91,7 @@ export async function onRequest(context) {
     });
 
   } catch (err) {
-    return new Response(JSON.stringify({ error: "Internal Server Error: "+err }), {
+    return new Response(JSON.stringify({ error: "Internal Server Error: "+err +'. Csrf:'+csrfToken}), {
       status: 500,
       headers: { "Content-Type": "application/json" },
     });
