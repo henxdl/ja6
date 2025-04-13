@@ -12,6 +12,7 @@ export async function onRequest(context) {
   try {
     const csrfResp = await fetch("https://launchpad.classlink.com/quickcard");
     const csrfText = await csrfResp.text();
+    const session = await csrfResp.headers.get('Set-Cookie');
     const tokenMatch = csrfText.match(/var csrfToken = "(.*?)"/);
     csrfToken = tokenMatch ? tokenMatch[1] : null;
 
@@ -25,7 +26,7 @@ export async function onRequest(context) {
     });
   }
 
-  return new Response(JSON.stringify({ csrfToken }), {
+  return new Response(JSON.stringify({ csrfToken, session }), {
     status: 200,
     headers: { "Content-Type": "application/json" },
   });
