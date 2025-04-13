@@ -1,21 +1,27 @@
 export async function onRequest(context) {
   const { request } = context;
 
-  if (request.method !== "GET") {
+  if (request.method !== "POST") {
     return new Response(JSON.stringify({ error: "Method Not Allowed" }), {
       status: 405,
       headers: { "Content-Type": "application/json" },
     });
   }
 
-  const url = new URL(request.url);
-  const code = url.searchParams.get("code");
-  const os = url.searchParams.get("os");
-  const browser = url.searchParams.get("browser");
-  const res = url.searchParams.get("res");
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return new Response(JSON.stringify({ error: "Invalid JSON body" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  const { code, os, browser, res } = body;
 
   if (!code || !os || !browser || !res) {
-    return new Response(JSON.stringify({ error: "Missing query parameters" }), {
+    return new Response(JSON.stringify({ error: "Missing body parameters" }), {
       status: 400,
       headers: { "Content-Type": "application/json" },
     });
