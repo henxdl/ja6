@@ -11,8 +11,8 @@ export async function onRequest(context) {
   let body;
   try {
     body = await request.json();
-  } catch {
-    return new Response(JSON.stringify({ error: "Invalid JSON body" }), {
+  } catch (err) {
+    return new Response(JSON.stringify({ error: "Invalid JSON body", details: err.message }), {
       status: 400,
       headers: { "Content-Type": "application/json" },
     });
@@ -27,19 +27,24 @@ export async function onRequest(context) {
     });
   }
 
+  let csrfToken = null;
   try {
     const csrfResp = await fetch("https://launchpad.classlink.com/quickcard");
     const csrfText = await csrfResp.text();
     const tokenMatch = csrfText.match(/var csrfToken = "(.*?)"/);
-    const csrfToken = tokenMatch ? tokenMatch[1] : null;
+    csrfToken = tokenMatch ? tokenMatch[1] : null;
 
     if (!csrfToken) {
-      return new Response(JSON.stringify({ error: "CSRF token not found" }), {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      });
+      throw new Error("CSRF token not found");
     }
+  } catch (err) {
+    return new Response(JSON.stringify({ error: "CSRF token retrieval failed", details: err.message }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
 
+  try {
     const qrResp = await fetch("https://launchpad.classlink.com/qrlogin", {
       method: "POST",
       headers: {
@@ -91,7 +96,7 @@ export async function onRequest(context) {
     });
 
   } catch (err) {
-    return new Response(JSON.stringify({ error: "Internal Server Error: "+err +'. Csrf:'+csrfToken}), {
+    return new Response(JSON.stringify({ error: "Internal Server Error", details: err.message, csrfToken }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
     });
