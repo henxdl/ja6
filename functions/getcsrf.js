@@ -4,7 +4,7 @@ export async function onRequest(context) {
   if (request.method !== "GET") {
     return new Response(JSON.stringify({ error: "Method Not Allowed" }), {
       status: 405,
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" }
     });
   }
 
@@ -12,7 +12,8 @@ export async function onRequest(context) {
   try {
     const csrfResp = await fetch("https://launchpad.classlink.com/quickcard");
     const csrfText = await csrfResp.text();
-    const session = await csrfResp.headers.get('Set-Cookie');
+    const cookies = res.headers.get('set-cookie');
+    const clsession = cookies && cookies.split(';').find(cookie => cookie.trim().startsWith('clsession='));
     const tokenMatch = csrfText.match(/var csrfToken = "(.*?)"/);
     csrfToken = tokenMatch ? tokenMatch[1] : null;
 
