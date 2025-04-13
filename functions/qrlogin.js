@@ -1,4 +1,6 @@
-async function handleRequest(request) {
+export async function onRequest(context) {
+  const { request } = context;
+
   if (request.method !== "GET") {
     return new Response(JSON.stringify({ error: "Method Not Allowed" }), {
       status: 405,
@@ -6,20 +8,20 @@ async function handleRequest(request) {
     });
   }
 
+  const url = new URL(request.url);
+  const code = url.searchParams.get("code");
+  const os = url.searchParams.get("os");
+  const browser = url.searchParams.get("browser");
+  const res = url.searchParams.get("res");
+
+  if (!code || !os || !browser || !res) {
+    return new Response(JSON.stringify({ error: "Missing query parameters" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   try {
-    const url = new URL(request.url);
-    const code = url.searchParams.get("code");
-    const os = url.searchParams.get("os");
-    const browser = url.searchParams.get("browser");
-    const res = url.searchParams.get("res");
-
-    if (!code || !os || !browser || !res) {
-      return new Response(JSON.stringify({ error: "Missing query parameters" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
     const csrfResp = await fetch("https://launchpad.classlink.com/quickcard");
     const csrfText = await csrfResp.text();
     const tokenMatch = csrfText.match(/var csrfToken = "(.*?)"/);
@@ -89,7 +91,3 @@ async function handleRequest(request) {
     });
   }
 }
-
-addEventListener("fetch", event => {
-  event.respondWith(handleRequest(event.request));
-});
