@@ -1,27 +1,45 @@
 async function handleRequest(request) {
+  if (request.method !== "GET") {
+    return new Response(JSON.stringify({ error: "Method Not Allowed" }), {
+      status: 405,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   try {
-    // Parse the URL and parameters
-    const { code, os, browser, res } = await request.json();
+    const url = new URL(request.url);
+    const code = url.searchParams.get("code");
+    const os = url.searchParams.get("os");
+    const browser = url.searchParams.get("browser");
+    const res = url.searchParams.get("res");
 
-    // Fetch the CSRF token from the ClassLink endpoint
-    const response = await fetch("https://launchpad.classlink.com/quickcard");
-    const data = await response.text();
-    const csrfTokenMatch = data.match(/var csrfToken = "(.*?)"/);
-    const csrfToken = csrfTokenMatch ? csrfTokenMatch[1] : null;
-
-    if (!csrfToken) {
-      return new Response(JSON.stringify({ error: "CSRF token not found" }), { status: 400 });
+    if (!code || !os || !browser || !res) {
+      return new Response(JSON.stringify({ error: "Missing query parameters" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
-    // Send a POST request with the CSRF token and other data
-    const postResponse = await fetch("/qrlogin", {
+    const csrfResp = await fetch("https://launchpad.classlink.com/quickcard");
+    const csrfText = await csrfResp.text();
+    const tokenMatch = csrfText.match(/var csrfToken = "(.*?)"/);
+    const csrfToken = tokenMatch ? tokenMatch[1] : null;
+
+    if (!csrfToken) {
+      return new Response(JSON.stringify({ error: "CSRF token not found" }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    const qrResp = await fetch("https://launchpad.classlink.com/qrlogin", {
       method: "POST",
       headers: {
-        "csrf-token": csrfToken || "",
         "Content-Type": "application/json",
+        "csrf-token": csrfToken,
       },
       body: JSON.stringify({
-        code: code,
+        code,
         OS: os,
         Browser: browser,
         Resolution: res,
@@ -29,29 +47,49 @@ async function handleRequest(request) {
       }),
     });
 
-    const r = await postResponse.json();
+    const r = await qrResp.json();
 
-    if (r && r.error && r.custom && r.custom.error_code === "not_found") {
-      return new Response(JSON.stringify({ error: "Not found" }), { status: 404 });
-    } else if (r && r.status && parseInt(r.status) === 3) {
-      const token = r.token;
-      return new Response(JSON.stringify({ redirect: `/login/twoformauth/${token}` }), { status: 200 });
-    } else if (r && parseInt(r.status) === 4) {
-      const token = r.token;
-      return new Response(JSON.stringify({ redirect: `/login/settwoformauth/${token}` }), { status: 200 });
+    if (r?.error?.custom?.error_code === "not_found") {
+      return new Response(JSON.stringify({ error: "Not found" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
-    if (!r || !r.status || !r.url) {
-      return new Response(JSON.stringify({ error: "QuickCard Login Failed" }), { status: 500 });
+    if (parseInt(r?.status) === 3) {
+      return new Response(JSON.stringify({ redirect: `/login/twoformauth/${r.token}` }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
-    return new Response(JSON.stringify({ url: r.url }), { status: 200 });
+    if (parseInt(r?.status) === 4) {
+      return new Response(JSON.stringify({ redirect: `/login/settwoformauth/${r.token}` }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
 
-  } catch (error) {
-    return new Response(JSON.stringify({ error: "Internal Server Error" }), { status: 500 });
+    if (!r?.status || !r?.url) {
+      return new Response(JSON.stringify({ error: "QuickCard Login Failed" }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    return new Response(JSON.stringify({ url: r.url }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+
+  } catch (err) {
+    return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 }
 
-addEventListener('fetch', event => {
+addEventListener("fetch", event => {
   event.respondWith(handleRequest(event.request));
 });
