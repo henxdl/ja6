@@ -12,7 +12,7 @@ export async function onRequest(context) {
   try {
     const csrfResp = await fetch("https://launchpad.classlink.com/quickcard");
     const csrfText = await csrfResp.text();
-    const cookies = res.headers.get('set-cookie');
+    const cookies = csrfResp.headers.get('set-cookie');
     const clsession = cookies && cookies.split(';').find(cookie => cookie.trim().startsWith('clsession='));
     const tokenMatch = csrfText.match(/var csrfToken = "(.*?)"/);
     csrfToken = tokenMatch ? tokenMatch[1] : null;
