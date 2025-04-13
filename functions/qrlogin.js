@@ -28,7 +28,7 @@ export async function onRequest(context) {
   }
 
   try {
-    const csrfResp = await fetch("https://launchpad.classlink.com");
+    const csrfResp = await fetch("https://launchpad.classlink.com/quickcard");
     const csrfText = await csrfResp.text();
     const tokenMatch = csrfText.match(/var csrfToken = "(.*?)"/);
     const csrfToken = tokenMatch ? tokenMatch[1] : null;
