@@ -48,7 +48,7 @@ export async function onRequest(context) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "csrf-token": csrfToken,
+        "_csrf": csrfToken,
       },
       body: JSON.stringify({
         code: code,
