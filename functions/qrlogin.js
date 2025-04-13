@@ -52,7 +52,7 @@ export async function onRequest(context) {
         "csrf-token": csrfToken,
       },
       body: JSON.stringify({
-        code,
+        code: code,
         OS: os,
         Browser: browser,
         Resolution: res,
