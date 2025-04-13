@@ -2,7 +2,7 @@
   "redirects": [
     {
       "source": "/pages",
-      "destination": "/api/pages",
+      "destination": "/pages",
       "permanent": true
     }
   ]
