@@ -1,10 +1,10 @@
 export async function onRequest(context) {
   const { request } = context;
-
+  const headers = { "Content-Type": "application/json",   "Access-Control-Allow-Origin": "*" };
   if (request.method !== "POST") {
     return new Response(JSON.stringify({ error: "Method Not Allowed" }), {
       status: 405,
-      headers: { "Content-Type": "application/json" },
+      headers: headers,
     });
   }
 
@@ -15,7 +15,7 @@ export async function onRequest(context) {
   } catch (err) {
     return new Response(JSON.stringify({ error: "Invalid JSON body", details: err.message }), {
       status: 400,
-      headers: { "Content-Type": "application/json" },
+      headers: headers,
     });
   }
 
@@ -24,7 +24,7 @@ export async function onRequest(context) {
   if (!code || !os || !browser || !res) {
     return new Response(JSON.stringify({ error: "Missing body parameters" }), {
       status: 400,
-      headers: { "Content-Type": "application/json" },
+      headers: headers,
     });
   }
   try {
@@ -39,7 +39,7 @@ export async function onRequest(context) {
   } catch (err) {
     return new Response(JSON.stringify({ error: "Failed to retrieve CSRF token", details: err.message }), {
       status: 500,
-      headers: { "Content-Type": "application/json" },
+      headers: headers,
     });
   }
 const cookieString = "_csrf="+csrf+"; clsession="+session;
@@ -66,40 +66,40 @@ const cookieString = "_csrf="+csrf+"; clsession="+session;
     if (r?.error?.custom?.error_code === "not_found") {
       return new Response(JSON.stringify({ error: "Not found" }), {
         status: 404,
-        headers: { "Content-Type": "application/json" },
+        headers: headers,
       });
     }
 
     if (parseInt(r?.status) === 3) {
       return new Response(JSON.stringify({ redirect: `/login/twoformauth/${r.token}` }), {
         status: 200,
-        headers: { "Content-Type": "application/json" },
+        headers: headers,
       });
     }
 
     if (parseInt(r?.status) === 4) {
       return new Response(JSON.stringify({ redirect: `/login/settwoformauth/${r.token}` }), {
         status: 200,
-        headers: { "Content-Type": "application/json" },
+        headers: headers,
       });
     }
 
     if (!r?.status || !r?.url) {
       return new Response(JSON.stringify({ error: "QuickCard Login Failed" }), {
         status: 500,
-        headers: { "Content-Type": "application/json" },
+        headers: headers,
       });
     }
 
     return new Response(JSON.stringify({ url: r.url, session, csrf }), {
       status: 200,
-      headers: { "Content-Type": "application/json",   "Access-Control-Allow-Origin": "*" },
+      headers: headers,
     });
 
   } catch (err) {
     return new Response(JSON.stringify({ error: "Internal Server Error", details: err.message }), {
       status: 500,
-      headers: { "Content-Type": "application/json" },
+      headers: headers,
     });
   }
 }
