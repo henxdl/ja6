@@ -43,10 +43,6 @@ export async function onRequest(context) {
     });
   }
 const cookieString = "_csrf="+csrf+"; clsession="+session;
-return new Response(JSON.stringify({ cookieString }), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
 
   try {
     const qrResp = await fetch("https://launchpad.classlink.com/qrlogin", {
