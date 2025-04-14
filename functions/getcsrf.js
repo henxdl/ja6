@@ -41,7 +41,7 @@ if (match2) {
     });
   }
 
-  return new Response(JSON.stringify({ csrfToken:csrf, session }), {
+  return new Response(JSON.stringify({ csrf, csrfToken, session }), {
     status: 200,
     headers: { "Content-Type": "application/json" },
   });
