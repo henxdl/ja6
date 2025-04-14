@@ -49,7 +49,7 @@ export async function onRequest(context) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "_csrf": csrfToken,
+        "Cookie": "_csrf="+csrfToken+"; clsession="+session
       },
       body: JSON.stringify({
         code: code,
