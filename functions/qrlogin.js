@@ -30,7 +30,7 @@ export async function onRequest(context) {
   try {
     const csrfResp = await fetch("https://ja6.pages.dev/getcsrf");
     const csrfData = await csrfResp.json();
-    ({ csrfToken, session } = csrfData);
+    ({ csrf, csrfToken, session } = csrfData);
     
 
     if (!csrfToken) {
@@ -42,7 +42,7 @@ export async function onRequest(context) {
       headers: { "Content-Type": "application/json" },
     });
   }
-const cookieString = "_csrf="+csrfToken+"; clsession="+session;
+const cookieString = "_csrf="+csrf+"; clsession="+session;
 return new Response(JSON.stringify({ cookieString }), {
     status: 200,
     headers: { "Content-Type": "application/json" },
@@ -53,7 +53,8 @@ return new Response(JSON.stringify({ cookieString }), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Cookie": cookieString
+        "Cookie": cookieString,
+        "csrf-token": csrfToken
       },
       body: JSON.stringify({
         code: code,
