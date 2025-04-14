@@ -9,7 +9,7 @@ export async function onRequest(context) {
   }
 
   let body;
-  let session, csrfToken;
+  let session, csrfToken, csrf;
   try {
     body = await request.json();
   } catch (err) {
