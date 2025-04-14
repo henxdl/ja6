@@ -42,14 +42,18 @@ export async function onRequest(context) {
       headers: { "Content-Type": "application/json" },
     });
   }
+const cookieString = "_csrf="+csrfToken+"; clsession="+session;
+return new Response(JSON.stringify({ cookieString }), {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
+  });
 
-  // Proceed with the login request using the CSRF token
   try {
     const qrResp = await fetch("https://launchpad.classlink.com/qrlogin", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Cookie": "_csrf="+csrfToken+"; clsession="+session
+        "Cookie": cookieString
       },
       body: JSON.stringify({
         code: code,
