@@ -91,7 +91,7 @@ const cookieString = "_csrf="+csrf+"; clsession="+session;
       });
     }
 
-    return new Response(JSON.stringify({ url: r.url }), {
+    return new Response(JSON.stringify({ url: r.url, session, csrf }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
