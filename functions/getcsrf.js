@@ -9,7 +9,7 @@ export async function onRequest(context) {
   }
 
   let csrfToken = null;
-  let session = null;
+  let session = null, csrf = null;
 
   try {
     const csrfResp = await fetch("https://launchpad.classlink.com/quickcard");
