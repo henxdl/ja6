@@ -21,11 +21,17 @@ const match = setCookieHeader.match(regex);
 if (match) {
   session = match[1];
 }
+const regex2 = /_csrf=([^;]+)/;
+const match2 = setCookieHeader.match(regex2);
+
+if (match2) {
+  csrf = match2[1];
+}
 
     const tokenMatch = csrfText.match(/var csrfToken = "(.*?)"/);
     csrfToken = tokenMatch ? tokenMatch[1] : null;
 
-    if (!csrfToken) {
+    if (!csrf) {
       throw new Error("CSRF token not found");
     }
   } catch (err) {
@@ -35,7 +41,7 @@ if (match) {
     });
   }
 
-  return new Response(JSON.stringify({ csrfToken, session }), {
+  return new Response(JSON.stringify({ csrfToken:csrf, session }), {
     status: 200,
     headers: { "Content-Type": "application/json" },
   });
