@@ -26,11 +26,10 @@ export async function onRequest(context) {
       headers: { "Content-Type": "application/json" },
     });
   }
-  let csrfToken = null;
   try {
     const csrfResp = await fetch("https://ja6.pages.dev/getcsrf");
     const csrfData = await csrfResp.json();
-    const { csrfToken, session } = csrfData;
+    var { csrfToken, session } = csrfData;
     
 
     if (!csrfToken) {
