@@ -9,6 +9,7 @@ export async function onRequest(context) {
   }
 
   let body;
+  let session, csrfToken;
   try {
     body = await request.json();
   } catch (err) {
@@ -29,7 +30,7 @@ export async function onRequest(context) {
   try {
     const csrfResp = await fetch("https://ja6.pages.dev/getcsrf");
     const csrfData = await csrfResp.json();
-    var { csrfToken, session } = csrfData;
+    ({ csrfToken, session } = csrfData);
     
 
     if (!csrfToken) {
