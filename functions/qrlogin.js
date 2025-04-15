@@ -1,8 +1,6 @@
 export async function onRequest(context) {
   const { request } = context;
   const headers = { "Content-Type": "application/json",   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Origin": "https://your-frontend-domain.com",
-  "Access-Control-Allow-Credentials": "true",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type"
 };
