@@ -4,12 +4,20 @@ export async function onRequest(context) {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type"
 };
-  if (request.method !== "POST" && request.method !== "OPTIONS") {
-    return new Response(JSON.stringify({ error: "Method Not Allowed" }), {
-      status: 405,
-      headers: headers,
-    });
-  }
+  if (request.method === "OPTIONS") {
+  return new Response(null, {
+    status: 204,
+    headers: headers,
+  });
+}
+
+if (request.method !== "POST") {
+  return new Response(JSON.stringify({ error: "Method Not Allowed" }), {
+    status: 405,
+    headers: headers,
+  });
+}
+
 
   let body;
   let session, csrfToken, csrf;
